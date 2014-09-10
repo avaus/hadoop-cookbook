@@ -1,0 +1,17 @@
+# 
+# This file get linked to /etc/hosts on all VMs
+# 
+
+127.0.0.1 localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+# List all Vagrant VMs
+192.168.60.101 hadoop-master hadoop-master.localdomain
+192.168.60.102 hadoop-slave hadoop-slave.localdomain

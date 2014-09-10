@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+<% unless node[:hadoop][:rpc_bind_host].nil? -%>
+  <property>
+    <name>dfs.namenode.rpc-bind-host</name>
+    <value><%= node[:hadoop][:rpc_bind_host] %></value>
+    <description>
+      The actual address the server will bind to.
+      If this optional address is set, the RPC server
+      will bind to this address and the port specified in
+      dfs.namenode.rpc-address for the RPC server.
+      It can also be specified per name node or name service for HA/Federation.
+      This is most useful for making name node listen to all interfaces by setting to 0.0.0.0.
+    </description>
+  </property>
+<% end -%>
+
+  <property>
+    <name>dfs.replication</name>
+    <value>1</value>
+    <description>Default block replication.
+    The actual number of replications can be specified when the file is created.
+    The default is used if replication is not specified in create time.
+    </description>
+  </property>
+
+  <property>
+    <name>dfs.hosts</name>
+    <value><%= node[:hadoop][:permitted_hosts] %></value>
+    <description>
+      Names a file that contains a list of hosts that are permitted to connect to the namenode.
+      The full pathname of the file must be specified. If the value is empty, all hosts are permitted.
+    </description>
+  </property>
+
+  <property>
+    <name>dfs.webhdfs.enabled</name>
+    <value><%= node[:hadoop][:webhdfs] %></value>
+    <description>Enable WebHDFS (REST API) in Namenodes and Datanodes.
+    </description>
+  </property>
+
+<% unless node[:hadoop][:datanode][:data_dir].nil? -%>
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value><%= node[:hadoop][:datanode][:data_dir] %></value>
+    <description>
+      Determines where on the local filesystem an DFS data node should store its blocks.
+      If this is a comma-delimited list of directories, then data will be stored in all named directories,
+      typically on different devices. Directories that do not exist are ignored.
+    </description>
+  </property>
+<% end -%>
+
+<% unless node[:hadoop][:namenode][:name_dir].nil? -%>
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value><%= node[:hadoop][:namenode][:name_dir] %></value>
+    <description>
+      Determines where on the local filesystem the DFS name node should store the name table(fsimage).
+      If this is a comma-delimited list of directories then the name table is replicated in all of the directories, for redundancy.
+    </description>
+  </property>
+<% end -%>
+
+  <property>
+        <name>dfs.permissions</name>
+        <value><%= node[:hadoop][:permissions] %></value>
+        <description> If "true", enable permission checking in
+        HDFS. If "false", permission checking is turned
+        off, but all other behavior is
+        unchanged. Switching from one parameter value to the other does
+        not change the mode, owner or group of files or
+        directories. </description>
+  </property>
+
+  <property>
+        <name>dfs.permissions.supergroup</name>
+        <value><%= node[:hadoop][:supergroup] %></value>
+        <description>The name of the group of
+        super-users.</description>
+  </property>
+
+
+  <property>
+    <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+    <value><%= node[:hadoop][:ip_hostname_check] %></value>
+    <description>
+      If true (the default), then the namenode requires that a connecting datanode's address must be resolved to a hostname.
+      If necessary, a reverse DNS lookup is performed. All attempts to register a datanode from an unresolvable address are rejected.
+      It is recommended that this setting be left on to prevent accidental registration of datanodes listed by hostname
+      in the excludes file during a DNS outage. Only set this to false in environments where there is no infrastructure to support reverse DNS lookup.
+    </description>
+  </property>
+</configuration>

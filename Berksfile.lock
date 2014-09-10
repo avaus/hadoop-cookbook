@@ -1,0 +1,23 @@
+DEPENDENCIES
+  hadoop
+    path: .
+    metadata: true
+  minitest-handler
+
+GRAPH
+  7-zip (1.0.2)
+    windows (>= 1.2.2)
+  apt (2.5.3)
+  ark (0.9.0)
+    7-zip (>= 0.0.0)
+    windows (>= 0.0.0)
+  chef_handler (1.1.6)
+  hadoop (0.1.0)
+    apt (>= 0.0.0)
+    ark (>= 0.0.0)
+    java (>= 0.0.0)
+  java (1.28.0)
+  minitest-handler (1.3.2)
+    chef_handler (>= 0.0.0)
+  windows (1.34.2)
+    chef_handler (>= 0.0.0)

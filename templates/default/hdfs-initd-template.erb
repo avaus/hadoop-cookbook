@@ -1,0 +1,100 @@
+#!/bin/bash
+#
+# 
+# Starts a Hadoop <%= @service_name %>
+#
+# chkconfig: 2345 90 10
+# description: Hadoop <%= @service_name %>
+ 
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+. /lib/lsb/init-functions
+ 
+RETVAL=0
+desc="Hadoop <%= @service_name %> daemon"
+PID_DIR=/var/run
+PIDFILE=$PID_DIR/<%= @service_name %>.pid
+
+SERVICE_NAME=<%= @service_name %>
+DAEMON=<%= @service_cmd %>
+DAEMON_ARGS=<%= @service_name %>
+USER=<%= node['hadoop']['user'] %>
+LOG_FILE=/var/log/hadoop_<%= @service_name %>.log
+
+start() {
+  echo -n $"Starting $desc: "
+  
+  rm -f $PIDFILE
+
+  start-stop-daemon --start --background --pidfile $PIDFILE --make-pidfile \
+        --user $USER --exec /bin/bash -- -c "exec $DAEMON $DAEMON_ARGS > $LOG_FILE 2>&1"
+  RETVAL=$?
+  echo
+  
+  printstatus $RETVAL
+
+  return $RETVAL
+}
+
+stop() {
+  echo -n $"Stopping $desc: "
+  
+  start-stop-daemon --stop --retry=TERM/30/KILL/5 --pidfile $PIDFILE
+  RETVAL="$?"
+  echo 
+
+  if [ $RETVAL == "0" ]; then
+    rm -f $PIDFILE
+  else
+    echo "Stopping failed!"
+  fi
+  return $RETVAL
+}
+
+checkstatus() {
+  if [ -f $PIDFILE ]; then
+    PID=$(cat $PIDFILE)
+    ps -p $PID > /dev/null 2>&1
+    RETVAL=$?
+
+    printstatus $RETVAL
+
+  else
+      echo "Not running"
+      RETVAL=1
+  fi
+  return $RETVAL
+}
+
+printstatus() {
+  if [ $1 == "0" ]; then
+    echo "Running"
+  else
+    echo "Not running"
+  fi
+}
+
+restart() {
+  stop
+  start
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+    checkstatus
+    ;;
+  restart)
+    restart
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|status|restart}"
+    exit 1
+esac
+
+exit $RETVAL

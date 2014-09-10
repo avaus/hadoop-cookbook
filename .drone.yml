@@ -1,0 +1,12 @@
+image: mattgruter/doubledocker
+
+script:
+  - /etc/init.d/docker start &
+  - bundle install
+  - bundle exec berks install --path .berkshelf
+  - bundle exec kitchen test
+
+notify:
+  email:
+    recipients:
+      - bigdata@avaus.flowdock.com

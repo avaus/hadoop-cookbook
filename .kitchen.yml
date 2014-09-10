@@ -1,0 +1,16 @@
+---
+driver:
+  name: docker
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+
+suites:
+- name: default
+  run_list:
+  - recipe[hadoop::namenode]
+  - recipe[hadoop::datanode]
+  attributes: {}

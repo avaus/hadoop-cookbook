@@ -1,0 +1,8 @@
+.vagrant
+.DS_Store
+.berkshelf
+.kitchen/
+.kitchen.local.yml
+berks-cookbooks/
+
+Berksfile

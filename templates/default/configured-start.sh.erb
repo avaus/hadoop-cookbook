@@ -1,0 +1,17 @@
+#!/bin/bash
+# 
+# Reads environment variables from /etc/default/
+# before running give script
+# 
+
+# Configure JAVA_HOME
+if [ -f /etc/profile.d/jdk.sh ]; then
+  . /etc/profile.d/jdk.sh
+fi
+
+# Load more environment variables from /etc/default/<%= @service_name %>
+if [ -f /etc/default/<%= @service_name %> ]; then
+  . /etc/default/<%= @service_name %>
+fi
+
+exec <%= @cmd %> $@

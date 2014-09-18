@@ -74,6 +74,11 @@ template 'capacity-scheduler.xml' do
   source 'capacity-scheduler.xml.erb'
 end
 
+template 'mapred-site.xml' do
+  path '/usr/local/hadoop/etc/hadoop/mapred-site.xml'
+  source 'mapred-site.xml.erb'
+end
+
 
 template '/usr/local/hadoop/bin/hdfs-configured' do
   mode '0755'
